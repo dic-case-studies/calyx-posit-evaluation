@@ -1,0 +1,43 @@
+decl rel: float[1024];
+decl img: float[1024];
+decl rel_twid: float[512];
+decl img_twid: float[512];
+
+let span:bit<32> = 1024 >> 1;
+let log:bit<32> = 0;
+
+while (span != 0) {
+  let odd = span;
+  while (odd < 1024) {
+    // based on baseline software, but check for rewrites
+    decor "#pragma HLS loop_tripcount avg=512"
+    odd := odd | span;
+    let even = odd ^ span;
+    let rel_odd = rel[odd];
+    let img_odd = img[odd];
+    ---
+    let rel_even = rel[even];
+    let img_even = img[even];
+    let temp_r = rel_even + rel_odd;
+    let temp_i = img_even + img_odd;
+    ---
+    rel[odd] := rel_even - rel_odd;
+    img[odd] := img_even - img_odd;
+    ---
+    rel[even] := temp_r;
+    img[even] := temp_i;
+    let rootindex = (even << log) & (1023);
+    ---
+    if (rootindex != 0) {
+      let temp = rel_twid[rootindex] * rel[odd] - img_twid[rootindex] * img[odd];
+      img_odd := img[odd];
+      ---
+      img[odd] := rel_twid[rootindex] * img_odd + img_twid[rootindex] * rel[odd];
+      ---
+      rel[odd] := temp;
+    }
+    odd := odd + 1;
+  }
+  span := span >> 1;
+  log := log + 1;
+}
