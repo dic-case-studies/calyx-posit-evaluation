@@ -1,0 +1,13 @@
+decl nzval: float[494][10];
+decl cols: bit<32>[494][10];
+decl vec: float[494];
+decl out: float[494];
+
+for (let i: bit<10> = 0..494) {
+  for (let j: bit<10>  = 0..10) {
+    let idx = cols[i][j];
+    let si = nzval[i][j] * vec[idx];
+  } combine {
+    out[i] += si;
+  }
+}
