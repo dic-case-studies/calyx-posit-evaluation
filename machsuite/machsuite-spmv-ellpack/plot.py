@@ -9,12 +9,12 @@ import math
 
 cpp_reference = {}
 
-with open("expected.fuse.data") as raw:
+with open("spmv.expect.double.json") as raw:
     cpp_reference = json.load(raw)
 
 posit_actual = {}
 
-with open("output.double.fuse.data") as raw:
+with open("spmv.output.double.json") as raw:
     posit_actual = json.load(raw)
 
 def decimal_accuracy(expected, actual):

@@ -1,21 +1,23 @@
-F2P_CONVERTOR = ~/Documents/projects/posit-git-tw/hardposit-chisel3/test_generator/build/F2PConvertor
-P2F_CONVERTOR = ~/Documents/projects/posit-git-tw/hardposit-chisel3/test_generator/build/P2FConvertor
-
 spmv.futil:
 	fuse ./spmv.fuse --lower -b calyx -o spmv.futil
 
-test_data:
-	$(F2P_CONVERTOR) ./input.double.fuse.data nzval 2 > input.posit.fuse.data
-	$(F2P_CONVERTOR) ./input.posit.fuse.data vec 1 > input.fuse.data 
+parse:
+	node parse.js
 
-run: spmv.futil test_data
-	fud e --to dat spmv.futil -s verilog.data input.fuse.data > output.posit.fuse.data
+convert-data: parse
+	$(F2P_CONVERTOR) ./spmv.in.double.json nzval 2 > spmv.in.posit_1.json
+	$(F2P_CONVERTOR) ./spmv.in.posit_1.json vec 1 > spmv.in.posit.json
 
-benchmark: run
-	$(P2F_CONVERTOR) ./output.posit.fuse.data out 1 > output.double.fuse.data
+run: spmv.futil convert-data
+	fud e --to dat spmv.futil -s verilog.data spmv.in.posit.json > spmv.output.posit.json
+
+convert-output: run
+	$(P2F_CONVERTOR) ./spmv.output.posit.json out 1 > spmv.output.double.json
+
+benchmark: convert-output
 	python3 plot.py
 
 clean:
-	rm *.fuse.data spmv.futil *.jpg
+	rm *.json spmv.futil *.jpg
 
 .PHONY=clean

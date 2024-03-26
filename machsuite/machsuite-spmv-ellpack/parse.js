@@ -33,5 +33,5 @@ const vec = { "data": input[2], format };
 const out = { "data": Array.from(check_data).fill(0), format };
 
 const outdata = { nzval, cols, vec, out };
-fs.writeFileSync('./input.double.fuse.data', JSON.stringify(outdata), 'utf8');
-fs.writeFileSync('./expected.fuse.data', JSON.stringify({ "out": check_data }), 'utf8');
+fs.writeFileSync('./spmv.in.double.json', JSON.stringify(outdata), 'utf8');
+fs.writeFileSync('./spmv.expect.double.json', JSON.stringify({ "out": check_data }), 'utf8');
