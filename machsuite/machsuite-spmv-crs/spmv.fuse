@@ -1,0 +1,29 @@
+decl val: float[1666];
+decl cols: bit<32>[1666];
+decl row_delimiters: bit<32>[495];
+decl vec: float[494];
+decl out: float[494];
+
+let sum: float = (0x0 as float);
+let si: float = (0x0 as float);
+
+let tmp_begin: bit<32> = 0;
+let tmp_end: bit<32> = 0;
+let j: bit<32> = 0;
+
+for (let i: bit<32> = 0..494) {
+  sum := (0x0 as float);
+  si := (0x0 as float);
+  tmp_begin := row_delimiters[i];
+  ---
+  tmp_end := row_delimiters[i+1];
+
+  j := tmp_begin;
+  while (j < tmp_end) {
+    let idx = cols[j];
+    si := val[j] * vec[idx];
+    sum := sum + si;
+    j := j + 1;
+  }
+  out[i] := sum;
+}
