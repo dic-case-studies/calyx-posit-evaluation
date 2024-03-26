@@ -1,0 +1,65 @@
+decl obs: bit<8>[140];
+decl init: float[64];
+decl transition: float[64][64];
+decl emission: float[64][64];
+decl path: bit<8>[140];
+
+let llike: float[140][64];
+let min_p: float = (0x0 as float);
+let p: float = (0x0 as float);
+let min_s: bit<8> = 0;
+
+{
+for (let s: bit<10> = 0..64) {
+  let idx = obs[0];
+  llike[0][s] := init[s] + emission[s][idx];
+}
+---
+for (let t: bit<10> = 1..140) {
+  for (let curr: bit<10> = 0..64) {
+    let idx = obs[t];
+    min_p := llike[t-1][0] + transition[0][curr] + emission[curr][idx];
+    ---
+    for (let prev: bit<10> = 1..64) {
+      p := llike[t-1][prev] + transition[prev][curr] + emission[curr][idx];
+      if (p < min_p) {
+        min_p := p;
+      }
+    }
+    ---
+    llike[t][curr] := min_p;
+  }
+}
+---
+min_p := llike[139][min_s];
+---
+for (let s: bit<8> = 1..64) {
+  p := llike[139][s];
+  if (p < min_p) {
+    min_p := p;
+    min_s := s;
+  }
+}
+path[139] := min_s;
+---
+let t: bit<9> = 138;
+let temp_t: bit<9> = 138;
+while (t >= 0) {
+  min_s := 0;
+  temp_t := t;
+  let idx = path[t+1];
+  min_p := llike[t][min_s] + transition[min_s][idx];
+  ---
+  for (let s: bit<8> = 1..64) {
+    let idx_1 = path[t+1];
+    p := llike[t][s] + transition[s][idx_1];
+    if (p < min_p) {
+      min_p := p;
+      min_s := s;
+    }
+  }
+  ---
+  path[t] := min_s;
+  t := temp_t - 1;
+}
+}
