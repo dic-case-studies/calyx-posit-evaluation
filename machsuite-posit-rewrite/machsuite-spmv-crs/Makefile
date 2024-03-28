@@ -1,3 +1,6 @@
+F2PConvertor=~/Documents/opensource/personal/hardposit-chisel3/test_generator/build/PositConvertor
+P2FConvertor=~/Documents/opensource/personal/hardposit-chisel3/test_generator/build/P2FConvertor
+
 all: convert-data convert-expect
 
 parse: check.data input.data
