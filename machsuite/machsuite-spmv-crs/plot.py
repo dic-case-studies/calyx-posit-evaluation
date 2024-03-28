@@ -10,12 +10,12 @@ import math
 
 cpp_reference = {}
 
-with open("cpp_actual.json") as raw:
+with open("spmv.expect.double.json") as raw:
     cpp_reference = json.load(raw)
 
 posit_actual = {}
 
-with open("output_double.json") as raw:
+with open("spmv.out.double.json") as raw:
     posit_actual = json.load(raw)
 
 def decimal_accuracy(expected, actual):
@@ -30,14 +30,17 @@ def relative_error(expected, actual):
 from skimage.metrics import structural_similarity as ssim
 from skimage.metrics import mean_squared_error
 
-var = ['rel', 'img']
+var = ['out']
 
 fig, ax = plt.subplots(2, 2)
 idx = 0
 
 for v in var:
-    expected = cpp_reference[v]
+    expected = cpp_reference[v]['data']
     actual = posit_actual['memories'][v]
+
+    # print(expected, actual)
+
 
     expected_np, actual_np = np.array(expected), np.array(actual)
     mse_none = mean_squared_error(expected_np, actual_np)
