@@ -1,0 +1,4 @@
+[submodule "utilities/cpp/universal"]
+	path = utilities/cpp/universal
+	url = https://github.com/stillwater-sc/universal.git
+	branch = v3.75

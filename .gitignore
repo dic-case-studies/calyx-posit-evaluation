@@ -1,5 +1,8 @@
-*.json
+build
 *.o
+
+*.json
+
 *.test.cpp
 _headers
 *.png
