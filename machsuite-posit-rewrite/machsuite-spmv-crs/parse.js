@@ -1,24 +1,11 @@
-const fs = require("fs")
+const { transform_machsuite_data_to_json } = require("../../utilities/js/machsuite-data");
 
-const input = fs.readFileSync('./input.data', 'utf8').split("%%").slice(1).map(a => a.split("\n")).map(a => {
-  const data = a.filter(a => a)
-  return data.map(a => parseFloat(a))
-})
+const vals = [
+    { field: "val", width: 32, dim: [1666], input: true, output: false },
+    { field: "cols", width: 32, dim: [1666], input: true, output: false },
+    { field: "row_delimiters", width: 32, dim: [495], input: true, output: false },
+    { field: "vec", width: 32, dim: [494], input: true, output: false },
+    { field: "out", width: 32, dim: [394], input: false, output: true }
+];
 
-const check_data = fs.readFileSync("./check.data", 'utf8').split("\n").slice(1, 495).map(a => parseFloat(a))
-
-const format = {
-    "numeric_type": "bitnum",
-    "is_signed": false,
-    "width": 32
-  }
-  
-const val = { "data": input[0], format };
-const cols = { "data": input[1], format };
-const row_delimiters = { "data": input[2], format };
-const vec = { "data": input[3], format };
-const out = { "data": Array.from(check_data).fill(0), format };
-
-const outdata = { val, cols, row_delimiters, vec, out };
-fs.writeFileSync('./spmv.in.double.json', JSON.stringify(outdata), 'utf8');
-fs.writeFileSync('./spmv.expect.double.json', JSON.stringify({ "out": {"data": check_data, format} }), 'utf8');
+transform_machsuite_data_to_json("spmv", vals);

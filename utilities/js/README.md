@@ -1,3 +1,8 @@
+# Utility to convert machsuite data to json
+
+## Usage
+
+```js
 const { transform_machsuite_data_to_json } = require("../../utilities/js/machsuite-data");
 
 const vals = [
@@ -9,3 +14,4 @@ const vals = [
 ];
 
 transform_machsuite_data_to_json("viterbi", vals);
+```
