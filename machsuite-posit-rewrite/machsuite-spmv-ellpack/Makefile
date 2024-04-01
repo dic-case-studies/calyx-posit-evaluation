@@ -1,23 +1,27 @@
-spmv.futil:
-	fuse ./spmv.fuse --lower -b calyx -o spmv.futil
+F2PConvertor=../../utilities/cpp/build/f2p_convertor
+P2FConvertor=../../utilities/cpp/build/p2f_convertor
 
-parse:
+all: parse run convert-p2f-actual
+
+%.futil: %.fuse
+	fuse $< --lower -b calyx -o $@
+
+convert-input:
+	$(F2PConvertor) spmv.in.double.json 32 --2d nzval --1d vec > spmv.in.posit.json
+
+convert-p2f-actual:
+	$(P2FConvertor) spmv.out.posit.json 32 --1d out > spmv.out.double.json
+
+parse: check.data input.data
 	node parse.js
 
-convert-data: parse
-	$(F2P_CONVERTOR) ./spmv.in.double.json nzval 2 > spmv.in.posit_1.json
-	$(F2P_CONVERTOR) ./spmv.in.posit_1.json vec 1 > spmv.in.posit.json
-
-run: spmv.futil convert-data
-	fud e --to dat spmv.futil -s verilog.data spmv.in.posit.json > spmv.output.posit.json
-
-convert-output: run
-	$(P2F_CONVERTOR) ./spmv.output.posit.json out 1 > spmv.output.double.json
-
-benchmark: convert-output
-	python3 plot.py
+run: spmv.futil convert-input
+	fud e --to dat $< -s verilog.data spmv.in.posit.json --through verilog > spmv.out.posit.json
 
 clean:
 	rm *.json spmv.futil *.jpg
 
-.PHONY=clean
+.PHONY=parse clean convert-input convert-p2f-actual
+
+# plot:
+# 	python plot.py

@@ -1,18 +1,27 @@
-viterbi.futil:
-	fuse viterbi.fuse --lower -b calyx -o viterbi.futil
+F2PConvertor=../../utilities/cpp/build/f2p_convertor
+P2FConvertor=../../utilities/cpp/build/p2f_convertor
 
-parse:
+all: parse run convert-p2f-actual
+
+%.futil: %.fuse
+	fuse $< --lower -b calyx -o $@
+
+convert-input:
+	$(F2PConvertor) viterbi.in.double.json 32 --1d val,vec,out > viterbi.in.posit.json
+
+convert-p2f-actual:
+	$(P2FConvertor) viterbi.out.posit.json 32 --1d out > viterbi.out.double.json
+
+parse: check.data input.data
 	node parse.js
 
-convert-data: parse
-	$(F2P_CONVERTOR) ./viterbi.in.double.json init 1 > viterbi.in.posit.json
-	$(F2P_CONVERTOR) ./viterbi.in.posit.json transition 2 > viterbi.in.posit_1.json
-	$(F2P_CONVERTOR) ./viterbi.in.posit_1.json emission 2 > viterbi.in.posit.json 
-
-run: viterbi.futil convert-data
-	fud e --to dat viterbi.futil -s verilog.data viterbi.in.posit.json > viterbi.output.int.json
+run: viterbi.futil convert-input
+	fud e --to dat $< -s verilog.data viterbi.in.posit.json --through verilog > viterbi.out.posit.json
 
 clean:
 	rm *.json viterbi.futil *.jpg
 
-.PHONY=clean
+.PHONY=parse clean convert-input convert-p2f-actual
+
+# plot:
+# 	python plot.py
