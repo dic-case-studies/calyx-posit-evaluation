@@ -1,7 +1,7 @@
 F2PConvertor=../../utilities/cpp/build/f2p_convertor
 P2FConvertor=../../utilities/cpp/build/p2f_convertor
 
-all: parse run convert-p2f-actual
+all: parse run convert-p2f-actual plot
 
 %.futil: %.fuse
 	fuse $< --lower -b calyx -o $@
@@ -18,10 +18,10 @@ parse: check.data input.data
 run: spmv.futil convert-input
 	fud e --to dat $< -s verilog.data spmv.in.posit.json --through verilog > spmv.out.posit.json
 
+plot:
+	python plot.py
+
 clean:
 	rm *.json spmv.futil *.jpg
 
 .PHONY=parse clean convert-input convert-p2f-actual
-
-# plot:
-# 	python plot.py

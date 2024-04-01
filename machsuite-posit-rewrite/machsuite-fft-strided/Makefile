@@ -1,7 +1,7 @@
 F2PConvertor=../../utilities/cpp/build/f2p_convertor
 P2FConvertor=../../utilities/cpp/build/p2f_convertor
 
-all: parse run convert-p2f-actual
+all: parse run convert-p2f-actual plot
 
 %.futil: %.fuse
 	fuse $< --lower -b calyx -o $@
@@ -17,6 +17,9 @@ parse: check.data input.data
 
 run: fft.futil convert-input
 	fud e --to dat $< -s verilog.data fft.in.posit.json --through verilog > fft.out.posit.json
+
+plot:
+	python plot.py
 
 clean:
 	rm *.json fft.futil *.jpg

@@ -75,7 +75,7 @@ const transform_machsuite_data_to_json = (benchmark, vals) => {
     );
     fs.writeFileSync(
         `./${benchmark}.expect.double.json`,
-        JSON.stringify({ "out": output_json }),
+        JSON.stringify(output_json),
         'utf8'
     );
 };

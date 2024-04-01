@@ -3,6 +3,8 @@ build
 
 *.json
 
+*.futil
+
 *.test.cpp
 _headers
 *.png
