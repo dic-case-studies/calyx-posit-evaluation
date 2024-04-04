@@ -8,3 +8,6 @@ build
 *.test.cpp
 _headers
 *.png
+
+*.egg*
+*.pyc
