@@ -7,7 +7,7 @@ setup(
       version='0.0.1',
       description='Scripts validation and plotting',
       author='Nimalan',
-      author_email='m.nimalan@thoughtworks.com',
+      author_email='nimalan.m@protonmail.com',
       url='https://github.com/dic-case-studies/calyx-posit-evaluation',
       packages=['validation_utils'],
       install_requires=[
