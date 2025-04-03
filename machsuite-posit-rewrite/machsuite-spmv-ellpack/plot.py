@@ -13,7 +13,7 @@ with open("spmv.expect.double.json") as f:
 
 for v in vars:
     plot_accuracy_error(
-        f'{v["name"]}.png',
+        'machsuite-spmv-ellpack.png',
         v["name"],
         data_actual['memories'][v["var_name"]],
         data_expect[v["var_name"]]['data']

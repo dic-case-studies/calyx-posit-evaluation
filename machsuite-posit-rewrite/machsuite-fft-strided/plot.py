@@ -14,7 +14,7 @@ with open("fft.expect.double.json") as f:
 
 for v in vars:
     plot_accuracy_error(
-        f'{v["name"]}.png',
+        f'machsuite-fft-strided-{v["name"]}.png',
         v["name"],
         data_actual['memories'][v["var_name"]],
         data_expect[v["var_name"]]['data']

@@ -1,7 +1,7 @@
 F2PConvertor=../../utilities/cpp/build/f2p_convertor
 P2FConvertor=../../utilities/cpp/build/p2f_convertor
 
-all: parse run convert-p2f-actual
+all: parse run convert-p2f-actual plot
 
 %.futil: %.fuse
 	fuse $< --lower -b calyx -o $@
